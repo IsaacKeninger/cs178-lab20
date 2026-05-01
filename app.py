@@ -190,10 +190,40 @@ def build_my_chart(df, display_name, types):
     Your chart should work well for any Pokémon, not just Charizard.
     """
     # ── Replace this placeholder with your own chart ───────────────────────────
+
+    TYPE_COLORS = {
+        "normal":   "#A8A878", "fire":     "#F08030", "water":    "#6890F0",
+        "electric": "#F8D030", "grass":    "#78C850", "ice":      "#98D8D8",
+        "fighting": "#C03028", "poison":   "#A040A0", "ground":   "#E0C068",
+        "flying":   "#A890F0", "psychic":  "#F85888", "bug":      "#A8B820",
+        "rock":     "#B8A038", "ghost":    "#705898", "dragon":   "#7038F8",
+        "dark":     "#705848", "steel":    "#B8B8D0", "fairy":    "#EE99AC",
+    }
+
+    stats  = df["stat"].tolist()
+    values = df["value"].tolist()
+    stats_closed  = stats  + [stats[0]]
+    values_closed = values + [values[0]]
+
     fig = go.Figure()
-    fig.update_layout(
-        title="Your chart goes here — edit build_my_chart() in app.py",
-    )
+
+    hex_color = TYPE_COLORS[types[0]]
+    r = int(hex_color[1:3], 16)
+    g = int(hex_color[3:5], 16)
+    b = int(hex_color[5:7], 16)
+
+    fig.add_trace(go.Bar(
+        y=stats_closed, # stat types
+        x=values_closed, # values
+        name='Horizontal Bar Chart',
+        orientation='h',
+        marker=dict(
+            color=hex_color,
+            line=dict(color=hex_color, width=3)
+        )
+    ))
+
+    fig.update_layout(barmode='stack')
     # ── End of placeholder ─────────────────────────────────────────────────────
     return apply_dark_theme(fig)
 
